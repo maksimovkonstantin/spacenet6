@@ -34,11 +34,13 @@ if __name__ == '__main__':
     epochs = config['epochs']
     fp16 = config['fp16']
     n_classes = config['n_classes']
-
+    input_channels = config['input_channels']
     model = make_model(
                model_name=model_name,
                weights=weights,
-               n_classes=n_classes).to(device)
+
+               n_classes=n_classes,
+               input_channels=input_channels).to(device)
 
     loss = get_loss(loss_name=loss_name)
     optimizer = get_optimizer(optimizer_name=optimizer_name,

@@ -5,7 +5,7 @@
       <paths name="root@46.17.97.39:22">
         <serverdata>
           <mappings>
-            <mapping deploy="/root/Repos/spacenet_round6/" local="$PROJECT_DIR$" />
+            <mapping deploy="/root/Repos/spacenet_round6" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

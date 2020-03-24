@@ -14,7 +14,7 @@ class SemSegDataset(Dataset):
             self, 
             images_dir='/data/SN6_buildings/train/AOI_11_Rotterdam/',
             masks_dir='/wdata/train_masks',
-            data_type='SAR-Intensity',
+            data_type='PS-RGB',
             mode='train',
             folds_file='/wdata/folds.csv',
             fold_number=1,
@@ -55,6 +55,8 @@ class SemSegDataset(Dataset):
         # read data
         if self.data_type == 'SAR-Intensity':
             image_path = os.path.join(self.images_dir, 'SN6_Train_AOI_11_Rotterdam_SAR-Intensity_' + self.ids[i] + '.tif')
+        elif self.data_type == 'PS-RGB':
+            image_path = os.path.join(self.images_dir, 'SN6_Train_AOI_11_Rotterdam_PS-RGB_' + self.ids[i] + '.tif')
         else:
             raise ValueError
         mask_path = os.path.join(self.masks_dir, self.ids[i] + '.tif')
