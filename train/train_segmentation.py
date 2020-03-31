@@ -7,7 +7,9 @@ from losses import get_loss
 from optimizers import get_optimizer
 from catalyst.dl.runner import SupervisedRunner
 from utils.helpers import get_config, parse_config_args
-from catalyst.dl.callbacks import CheckpointCallback, DiceCallback, SchedulerCallback, EarlyStoppingCallback, IouCallback
+from catalyst.dl.callbacks import CheckpointCallback, SchedulerCallback, EarlyStoppingCallback, IouCallback
+from callbacks import DiceCallback
+# from pytorch_toolbelt.utils.catalyst.metrics import IoUMetricsCallback
 # from segmentation_metrics import MultiClassDiceScoreCallback
 
 if __name__ == '__main__':
@@ -35,6 +37,14 @@ if __name__ == '__main__':
     fp16 = config['fp16']
     n_classes = config['n_classes']
     input_channels = config['input_channels']
+    main_metric = config['main_metric']
+    mode = config['scheduler_mode']
+    min_lr = config['min_lr']
+    threshold = config['thershold']
+    best_models_count = config['best_models_count']
+    minimize_metric = config['minimize_metric']
+    min_delta = config['min_delta']
+
     model = make_model(
                model_name=model_name,
                weights=weights,
@@ -57,27 +67,20 @@ if __name__ == '__main__':
                                                                factor=alpha,
                                                                verbose=True,
                                                                patience=patience,
-                                                               mode='max',
-                                                               threshold=1e-6,
-                                                               min_lr=1e-5)
+                                                               mode=mode,
+                                                               threshold=threshold,
+                                                               min_lr=min_lr)
     else:
         scheduler = None
     callbacks = []
-    #classes = ['Fish',
-    #           'Flower',
-    #           'Gravel',
-    #           'Sugar']
-    #callbacks.append(MultiClassDiceScoreCallback(num_classes=n_classes,
-    #                                             class_names=classes,
-    #                                            mode='multilabel'))
-    # callbacks.append(DiceCallback())
-    # callbacks.append(IouCallback())
-    callbacks.append(CheckpointCallback(save_n_best=4))
-    # callbacks.append(SchedulerCallback(reduce_metric='val_loss'))
+    # dice_callback = IoUMetricsCallback(mode='binary', lasses_of_interest=[0])
+    dice_callback = DiceCallback()
+    callbacks.append(dice_callback)
+    callbacks.append(CheckpointCallback(save_n_best=best_models_count))
     callbacks.append(EarlyStoppingCallback(patience=config['early_stopping'],
-                                          metric='loss',
-                                          minimize=True,
-                                          min_delta=1e-6))
+                                          metric=main_metric,
+                                          minimize=minimize_metric,
+                                          min_delta=min_delta))
     
     
     
@@ -94,7 +97,7 @@ if __name__ == '__main__':
                  logdir=log_path,
                  num_epochs=epochs,
                  verbose=True,
-                 main_metric='loss',
-                 minimize_metric=True,
+                 main_metric=main_metric,
+                 minimize_metric=minimize_metric,
                  fp16=fp16
                 )

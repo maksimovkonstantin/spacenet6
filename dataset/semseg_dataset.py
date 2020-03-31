@@ -6,7 +6,6 @@ import skimage.io
 import torch
 import albumentations as albu
 from torch.utils.data import Dataset, DataLoader
-from albumentations.pytorch.transforms import ToTensorV2
 
 
 class SemSegDataset(Dataset):  
@@ -14,7 +13,7 @@ class SemSegDataset(Dataset):
             self, 
             images_dir='/data/SN6_buildings/train/AOI_11_Rotterdam/',
             masks_dir='/wdata/train_masks',
-            data_type='PS-RGB',
+            data_type='SAR-Intensity',
             mode='train',
             folds_file='/wdata/folds.csv',
             fold_number=1,
@@ -84,8 +83,54 @@ class SemSegDataset(Dataset):
     def __len__(self):
         return len(self.ids)
 
-    
+
+class TestSemSegDataset(Dataset):
+    def __init__(
+            self,
+            images_dir='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Intensity/',
+            augmentation=None,
+            preprocessing=None,
+            limit_files=None
+
+    ):
+        self.images_dir = images_dir
+        self.augmentation = augmentation
+        self.preprocessing = preprocessing
+        ids = sorted(os.listdir(images_dir))
+        if limit_files:
+            ids = ids[:limit_files]
+        self.ids = ids
+
+    @staticmethod
+    def _read_img(image_path):
+        img = skimage.io.imread(image_path, plugin='tifffile')
+        return img
+
+    def __getitem__(self, i):
+
+        image_path = os.path.join(self.images_dir, self.ids[i])
+        #print('BBBBBBBB')
+        #print(image_path)
+        #print(self.ids[i])
+        image = self._read_img(image_path)
+        if self.augmentation:
+            sample = albu.Compose(self.augmentation, p=1)(image=image)
+
+            image = sample['image']
+
+        if self.preprocessing:
+            image = self.preprocessing(image)
+
+        image = np.moveaxis(image, -1, 0)
+        image = torch.as_tensor(image, dtype=torch.float)
+        return image
+
+    def __len__(self):
+        return len(self.ids)
+
+
 if __name__ == '__main__':
+    print('Validation dataset testing')
     dataset = SemSegDataset(mode='valid', augmentation=albu.Compose([albu.RandomCrop(320, 320)], p=1))
     check_loader = DataLoader(dataset=dataset,
                               batch_size=10,
@@ -94,3 +139,13 @@ if __name__ == '__main__':
         if step > 10:
             break
         print('step is', step, x.shape, y.shape)
+
+    print('Test dataset testing')
+    dataset = TestSemSegDataset(augmentation=albu.Compose([albu.PadIfNeeded(928, 928)], p=1))
+    check_loader = DataLoader(dataset=dataset,
+                              batch_size=10,
+                              shuffle=False)
+    for step, x in enumerate(check_loader):
+        if step > 10:
+            break
+        print('step is', step, x.shape)

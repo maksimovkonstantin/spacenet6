@@ -5,25 +5,32 @@ import torch.nn as nn
 
 def make_model(model_name='unet_resnet34',
                weights='imagenet', n_classes=2, input_channels=4):
+    if weights != 'imagenet' or weights is None:
+        weights_to_load = None
+    else:
+        weights_to_load = weights
     if model_name.split('_')[0] == 'unet':
         
         model = smp.Unet('_'.join(model_name.split('_')[1:]), 
                          classes=n_classes,
                          activation=None,
-                         encoder_weights=weights)
+                         encoder_weights=weights_to_load)
         
     elif model_name.split('_')[0] == 'fpn':
         model = smp.FPN('_'.join(model_name.split('_')[1:]), 
                          classes=n_classes,
                          activation=None,
-                         encoder_weights=weights)
+                         encoder_weights=weights_to_load)
     elif model_name.split('_')[0] == 'linknet':
         model = smp.Linknet('_'.join(model_name.split('_')[1:]),
                          classes=n_classes,
                          activation=None,
-                         encoder_weights=weights)        
+                         encoder_weights=weights_to_load)
     else:
         raise ValueError('Model not implemented')
+    if weights != 'imagenet' and weights is not None:
+        print('Pretrained weights loaded')
+        model.load_state_dict(torch.load(weights)['model_state_dict'])
     # print(vars(model))
     if input_channels != 3:
         if model_name.split('_')[1] == 'vgg11':

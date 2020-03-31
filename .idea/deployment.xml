@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="root@46.17.97.39:22" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" serverName="hostkey" autoUploadExternalChanges="true" showAutoUploadSettingsWarning="false">
     <serverData>
-      <paths name="root@46.17.97.39:22">
+      <paths name="hostkey">
         <serverdata>
           <mappings>
-            <mapping deploy="/root/Repos/spacenet_round6" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/Repos/spacenet_round6" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

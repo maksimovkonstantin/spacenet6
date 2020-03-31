@@ -27,7 +27,7 @@ class FocalDiceLoss(torch.nn.Module):
 
     def forward(self, outputs, targets):
         loss = 0.0
-        weights = [1.0, 0.1]
+        weights = [1.0, 1.0]
         # print(outputs.shape, targets.shape)
         for i in range(2):
             dice = weights[i]*self.dice_loss(outputs[:, i, ...], targets[:, i, ...])
