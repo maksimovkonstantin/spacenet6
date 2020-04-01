@@ -42,8 +42,8 @@ def wsh(mask_img, threshold, border_img, seeds, shift):
     labeled_array = my_watershed(mask_img, mask_img, img_copy)
     return labeled_array
 
-prob_trs = 0.5
-shift = 0.4
+prob_trs = 0.6
+shift = 0.3
 MIN_POLYGON_AREA = 0
 submit_path = '/wdata/submits/solution.csv'
 data_path = '/wdata/segmentation_test_results/'

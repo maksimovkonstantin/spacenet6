@@ -7,6 +7,47 @@ from models.model_factory import make_model
 import skimage.io
 import albumentations as albu
 import rasterio
+from pytorch_toolbelt.inference import tta
+
+def torch_flipud(x):
+    """
+    Flip image tensor vertically
+    :param x:
+    :return:
+    """
+    return x.flip(2)
+
+
+def torch_fliplr(x):
+    """
+    Flip image tensor horizontally
+    :param x:
+    :return:
+    """
+    return x.flip(3)
+
+
+def flip_image2mask(model, image):
+    """Test-time augmentation for image segmentation that averages predictions
+    for input image and vertically flipped one.
+    For segmentation we need to reverse the transformation after making a prediction
+    on augmented input.
+    :param model: Model to use for making predictions.
+    :param image: Model input.
+    :return: Arithmetically averaged predictions
+    """
+    output = (torch.sigmoid(model(image)) +
+              torch.sigmoid(torch_fliplr(model(torch_fliplr(image)))) +
+              torch.sigmoid(torch_flipud(model(torch_flipud(image))))
+             )
+
+    #output = (torch.sigmoid(model(image)) +
+    #       torch.sigmoid(torch_fliplr(model(torch_fliplr(image))))
+    #         )
+    one_over_3 = float(1.0 / 3.0)
+    # one_over_2 = float(1.0 / 2.0)
+    return output * one_over_3
+
 
 
 if __name__ == '__main__':
@@ -32,9 +73,13 @@ if __name__ == '__main__':
                weights=None, 
                n_classes=n_classes,
                input_channels=input_channels).to(device)
-        
+
+
+
         model.load_state_dict(torch.load(weights_path)['model_state_dict'])
+
         model.eval()
+        model = tta.TTAWrapper(model, flip_image2mask)
 
         file_names = sorted(config['test_dataset'].ids)
         # runner = SupervisedRunner(model=model)
@@ -43,7 +88,8 @@ if __name__ == '__main__':
             # print(test_batch.shape)
             # runner_out = runner.predict_batch({"features": test_batch[0].cuda()})['logits']
             runner_out = model(test_batch.cuda())
-            image_pred = torch.sigmoid(runner_out)
+            # image_pred = torch.sigmoid(runner_out)
+            image_pred = runner_out
             image_pred = image_pred.cpu().detach().numpy()
             names = file_names[batch_i*val_batch_size:(batch_i+1)*val_batch_size]
             for i in range(len(names)):
