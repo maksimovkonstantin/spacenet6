@@ -60,7 +60,7 @@ def create_masks(data_root_path='/data/SN6_buildings/train/AOI_11_Rotterdam/',
         final_mask = rasterDriver.Create(out_path,
                                          height,
                                          width,
-                                         2,
+                                         3,
                                          gdal.GDT_Byte)
 
         final_mask.SetGeoTransform(tileGeoTransformationParams)
@@ -81,6 +81,8 @@ def create_masks(data_root_path='/data/SN6_buildings/train/AOI_11_Rotterdam/',
         tempTile.Fill(0)
         tempTile.SetNoDataValue(0)
         tempTile.WriteArray(all_contours[:, :])
+
+        
 
         final_mask = None
 

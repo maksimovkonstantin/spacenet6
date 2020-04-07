@@ -69,8 +69,15 @@ if __name__ == '__main__':
         original_size = config['original_size']
         cropper = albu.Compose([albu.CenterCrop(original_size[0], original_size[1], p=1.0)])
         models = []
-        paths = ['/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth',
-                 '/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth']
+        #paths = ['/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth',
+        #         '/wdata/segmentation_logs/baseline_mid_v3_2_unet_resnet34/checkpoints/best.pth']
+        #paths = ['/wdata/segmentation_logs/baseline_flips_crops_1_unet_resnet34/checkpoints/best.pth',
+        #        '/wdata/segmentation_logs/baseline_flips_crops_2_unet_resnet34/checkpoints/best.pth',
+        #         '/wdata/segmentation_logs/baseline_flips_crops_3_unet_resnet34/checkpoints/best.pth']
+        paths = ['/wdata/segmentation_logs/baseline_flips_crops_1_unet_densenet161/checkpoints/best.pth',
+                '/wdata/segmentation_logs/baseline_flips_crops_2_unet_densenet161/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/baseline_flips_crops_3_unet_densenet161/checkpoints/best.pth']
+
         for weights_path in paths:
             model = make_model(
                    model_name=model_name,
@@ -92,10 +99,16 @@ if __name__ == '__main__':
         for batch_i, test_batch in enumerate(tqdm(test_loader)):
             # print(test_batch.shape)
             # runner_out = runner.predict_batch({"features": test_batch[0].cuda()})['logits']
-            runner_out = model(test_batch.cuda())
-            # image_pred = torch.sigmoid(runner_out)
-            image_pred = runner_out
-            image_pred = image_pred.cpu().detach().numpy()
+            for model_i, model in enumerate(models):
+                runner_out = model(test_batch.cuda())
+                # image_pred = torch.sigmoid(runner_out)
+                if model_i == 0:
+                    image_pred = runner_out.cpu().detach().numpy()
+                else:
+                    image_pred += runner_out.cpu().detach().numpy()
+                # image_pred = runner_out
+
+            image_pred = image_pred / len(models)
             names = file_names[batch_i*val_batch_size:(batch_i+1)*val_batch_size]
             for i in range(len(names)):
                 file_name = os.path.join(test_predict_result, names[i])

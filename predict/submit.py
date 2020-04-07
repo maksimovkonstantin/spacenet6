@@ -42,8 +42,10 @@ def wsh(mask_img, threshold, border_img, seeds, shift):
     labeled_array = my_watershed(mask_img, mask_img, img_copy)
     return labeled_array
 
-prob_trs = 0.6
-shift = 0.3
+
+prob_trs = 0.3
+shift = 0.4
+
 MIN_POLYGON_AREA = 0
 submit_path = '/wdata/submits/solution.csv'
 data_path = '/wdata/segmentation_test_results/'
@@ -106,6 +108,5 @@ for _file in tqdm(files):
     else:
         f.write("{},{},0\n".format(
             fid,
-            -1,
             "POLYGON EMPTY"))
 f.close()
