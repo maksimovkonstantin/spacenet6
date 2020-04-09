@@ -9,7 +9,7 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/tmp_1_unet_resnet34/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/baseline_1_selim_dpn92/checkpoints/best.pth'
 validation_predict_result = '/wdata/segmentation_validation_results'
 test_predict_result = '/wdata/segmentation_test_results'
 submit_path = '/wdata/submits/baseline.csv'
@@ -38,19 +38,19 @@ loss = 'focal_dice'
 optimizer = 'radam'
 fp16 = False
 
-alias = 'tmp_'
-model_name = 'unet_resnet34'
+alias = 'baseline_'
+model_name = 'selim_dpn92'
 scheduler = 'reduce_on_plateau'
 patience = 10
 
-early_stopping = 50
+early_stopping = 30
 min_delta = 0.005
 
 alpha = 0.5
 augs_p = 0.5
 min_lr = 1e-5
 thershold = 0.005
-best_models_count = 5
+best_models_count = 1
 
 epochs = 300
 weights = 'imagenet'

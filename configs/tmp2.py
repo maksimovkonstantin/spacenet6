@@ -9,7 +9,7 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/tmp_1_unet_resnet34/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/tmp2_1_unet_resnet34/checkpoints/best.pth'
 validation_predict_result = '/wdata/segmentation_validation_results'
 test_predict_result = '/wdata/segmentation_test_results'
 submit_path = '/wdata/submits/baseline.csv'
@@ -38,7 +38,7 @@ loss = 'focal_dice'
 optimizer = 'radam'
 fp16 = False
 
-alias = 'tmp_'
+alias = 'tmp2_'
 model_name = 'unet_resnet34'
 scheduler = 'reduce_on_plateau'
 patience = 10

@@ -17,6 +17,7 @@ class SemSegDataset(Dataset):
             mode='train',
             folds_file='/wdata/folds.csv',
             fold_number=1,
+            n_classes=2,
             augmentation=None, 
             preprocessing=None,
             limit_files=None
@@ -34,6 +35,7 @@ class SemSegDataset(Dataset):
 
         if limit_files:
             folds = folds[:limit_files]
+        self.n_classes = n_classes
         self.ids = folds
         self.data_type = data_type
         self.folds = folds
@@ -61,7 +63,7 @@ class SemSegDataset(Dataset):
         mask_path = os.path.join(self.masks_dir, self.ids[i] + '.tif')
 
         image = self._read_img(image_path)
-        mask = self._read_img(mask_path)
+        mask = self._read_img(mask_path)[:, :, :self.n_classes]
         if self.augmentation:
             sample = albu.Compose(self.augmentation, p=1)(image=image,
                                                           mask=mask)

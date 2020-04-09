@@ -9,7 +9,7 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/tmp_1_unet_resnet34/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/baseline_flips_crops_1_unet_dpn92/checkpoints/best.pth'
 validation_predict_result = '/wdata/segmentation_validation_results'
 test_predict_result = '/wdata/segmentation_test_results'
 submit_path = '/wdata/submits/baseline.csv'
@@ -26,7 +26,7 @@ crop_size = (320, 320)
 val_size = (928, 928)
 original_size = (900, 900)
 
-batch_size = 32
+batch_size = 28
 num_workers = 16
 val_batch_size = 8
 
@@ -38,8 +38,8 @@ loss = 'focal_dice'
 optimizer = 'radam'
 fp16 = False
 
-alias = 'tmp_'
-model_name = 'unet_resnet34'
+alias = 'baseline_flips_crops_'
+model_name = 'unet_dpn92'
 scheduler = 'reduce_on_plateau'
 patience = 10
 

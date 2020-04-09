@@ -1,12 +1,14 @@
 import torch
 from radam import RAdam
+
+
 def get_optimizer(optimizer_name, model, lr, momentum, decay):
-    if optimizer_name == 'adam':
+    if optimizer_name == 'radam':
         
         optimizer = RAdam(model.parameters(),
                                     lr,
                                     weight_decay=decay)
-    elif optimizer_name == 'radam':
+    elif optimizer_name == 'adam':
         
         optimizer = torch.optim.Adam(model.parameters(),
                                     lr,

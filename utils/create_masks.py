@@ -6,6 +6,38 @@ import numpy as np
 import cv2
 from tqdm import tqdm
 from osgeo import ogr
+from scipy import ndimage as ndi
+from skimage import measure
+from skimage.morphology import dilation, square, watershed
+from scipy.ndimage import binary_erosion
+
+def create_separation(labels):
+    tmp = dilation(labels > 0, square(12))
+    tmp2 = watershed(tmp, labels, mask=tmp, watershed_line=True) > 0
+    tmp = tmp ^ tmp2
+    tmp = dilation(tmp, square(3))
+
+    props = measure.regionprops(labels)
+
+    msk1 = np.zeros_like(labels, dtype='bool')
+
+    for y0 in range(labels.shape[0]):
+        for x0 in range(labels.shape[1]):
+            if not tmp[y0, x0]:
+                continue
+            if labels[y0, x0] == 0:
+                sz = 5
+            else:
+                sz = 7
+                if props[labels[y0, x0] - 1].area < 300:
+                    sz = 5
+                elif props[labels[y0, x0] - 1].area < 2000:
+                    sz = 6
+            uniq = np.unique(labels[max(0, y0 - sz):min(labels.shape[0], y0 + sz + 1),
+                             max(0, x0 - sz):min(labels.shape[1], x0 + sz + 1)])
+            if len(uniq[uniq > 0]) > 1:
+                msk1[y0, x0] = True
+    return msk1
 
 
 def create_masks(data_root_path='/data/SN6_buildings/train/AOI_11_Rotterdam/',
@@ -60,7 +92,7 @@ def create_masks(data_root_path='/data/SN6_buildings/train/AOI_11_Rotterdam/',
         final_mask = rasterDriver.Create(out_path,
                                          height,
                                          width,
-                                         3,
+                                         2,
                                          gdal.GDT_Byte)
 
         final_mask.SetGeoTransform(tileGeoTransformationParams)
@@ -71,18 +103,56 @@ def create_masks(data_root_path='/data/SN6_buildings/train/AOI_11_Rotterdam/',
         tempTile.WriteArray(mask[:, :])
         h, w = mask.shape
         all_contours = np.zeros((h, w), dtype=np.uint8)
-        im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # print(len(cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)))
+        # im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # im2, contours = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        # commented
+        contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[-2:]
+
         for cnt in contours:
             img = np.zeros((h, w), dtype=np.uint8)
             cv2.drawContours(img, [cnt], 0, 255, 1)
             contour = img.astype(np.uint8)
             all_contours += contour
+        #labels = ndi.label(mask, output=np.uint32)[0]
+        #ships_num = np.max(labels)
+
+        #if ships_num > 0:
+        #    for i in range(1, ships_num + 1):
+        #        ship_mask = np.zeros_like(labels, dtype='bool')
+        #        ship_mask[labels == i] = 1
+        #
+        #        area = np.sum(ship_mask)
+        #        #if area < 80:
+        #        #    continue
+        #
+        #        if area < 200:
+        #            contour_size = 1
+        #        elif area < 500:
+        #            contour_size = 2
+        #        else:
+        #           contour_size = 3
+        #        eroded = binary_erosion(ship_mask, iterations=contour_size)
+        #        countour_mask = ship_mask ^ eroded
+        #        all_contours += countour_mask
+        #all_contours =(all_contours > 0).astype(np.uint8) * 255
         tempTile = final_mask.GetRasterBand(2)
         tempTile.Fill(0)
         tempTile.SetNoDataValue(0)
         tempTile.WriteArray(all_contours[:, :])
 
-        
+
+        #separation = create_separation(labels)
+        #separation = separation > 0
+        #separation = separation.astype(np.uint8)
+        #separation = separation * 255
+
+        #tempTile = final_mask.GetRasterBand(3)
+        #tempTile.Fill(0)
+        #tempTile.SetNoDataValue(0)
+        #tempTile.WriteArray(separation[:, :])
+
 
         final_mask = None
 

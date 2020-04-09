@@ -81,7 +81,7 @@ summary = [0, 0, 0]
 # shifts = [0.1, 0.2, 0.3, 0.4, 0.45]
 probs = [0.3, 0.4, 0.5, 0.6]
 # probs = [0.7, 0.8, 0.9]
-shifts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+shifts = [0.2, 0.3, 0.4]
 probs = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 shifts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 best_params = ''
@@ -97,7 +97,10 @@ for prob_trs in probs:
             gt_labels = ndi.label(gt, output=np.uint32)[0]
             # pred_data[:, :, 1] = 0.0
             tmp_labels = wsh(pred_data[:, :, 0], prob_trs,
-                             1 - pred_data[:, :, 1],
+                             # (1 - pred_data[:, :, 2]) * (1 - pred_data[:, :, 1]),
+                             # np.ones(pred_data.shape[:2]),
+                             # (1 - pred_data[:, :, 1]),
+                             (1 - pred_data[:, :, 2]),
                              pred_data[:, :, 0], shift)
             # plt.imshow(tmp_labels)
             pred_labels = tmp_labels

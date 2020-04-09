@@ -69,22 +69,22 @@ if __name__ == '__main__':
         original_size = config['original_size']
         cropper = albu.Compose([albu.CenterCrop(original_size[0], original_size[1], p=1.0)])
         models = []
-        paths = ['/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth',
-                 '/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth']
-        for weights_path in paths:
-            model = make_model(
-                   model_name=model_name,
-                   weights=None,
-                   n_classes=n_classes,
-                   input_channels=input_channels).to(device)
+        #paths = ['/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth',
+        #         '/wdata/segmentation_logs/baseline_mid_v3_1_unet_resnet34/checkpoints/best.pth']
+        #for weights_path in paths:
+        model = make_model(
+               model_name=model_name,
+               weights=None,
+               n_classes=n_classes,
+               input_channels=input_channels).to(device)
 
 
 
-            model.load_state_dict(torch.load(weights_path)['model_state_dict'])
+        model.load_state_dict(torch.load(weights_path)['model_state_dict'])
 
-            model.eval()
-            model = tta.TTAWrapper(model, flip_image2mask)
-            models.append(model)
+        model.eval()
+        model = tta.TTAWrapper(model, flip_image2mask)
+        #models.append(model)
 
         file_names = sorted(config['test_dataset'].ids)
         # runner = SupervisedRunner(model=model)
@@ -95,12 +95,15 @@ if __name__ == '__main__':
             runner_out = model(test_batch.cuda())
             # image_pred = torch.sigmoid(runner_out)
             image_pred = runner_out
+
             image_pred = image_pred.cpu().detach().numpy()
             names = file_names[batch_i*val_batch_size:(batch_i+1)*val_batch_size]
             for i in range(len(names)):
                 file_name = os.path.join(test_predict_result, names[i])
                 # data = image_pred[i, ...][0, ...]
+
                 data = image_pred[i, ...]
+                #print(data.shape)
                 data = np.moveaxis(data, 0, -1)
                 sample = cropper(image=data)
 
