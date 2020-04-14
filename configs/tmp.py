@@ -22,13 +22,13 @@ device = 'cuda'
 fold_number = 1
 n_classes = 2
 input_channels = 4
-crop_size = (320, 320)
+crop_size = (384, 384)
 val_size = (928, 928)
 original_size = (900, 900)
 
 batch_size = 32
-num_workers = 16
-val_batch_size = 8
+num_workers = 8
+val_batch_size = 4
 
 shuffle = True
 lr = 1e-4
@@ -43,12 +43,12 @@ model_name = 'unet_resnet34'
 scheduler = 'reduce_on_plateau'
 patience = 10
 
-early_stopping = 50
+early_stopping = 30
 min_delta = 0.005
 
 alpha = 0.5
 augs_p = 0.5
-min_lr = 1e-5
+min_lr = 1e-6
 thershold = 0.005
 best_models_count = 5
 
@@ -62,12 +62,12 @@ limit_files = None # for debug
 
 preprocessing_fn = None
 
-train_augs = albu.Compose([albu.OneOf([albu.RandomCrop(crop_size[0], crop_size[1], p=1.0),
-                                       albu.RandomSizedCrop((int(crop_size[0] * 0.9), int(crop_size[1] * 1.1)),
-                                                            crop_size[0], crop_size[1], p=1.0)
+train_augs = albu.Compose([albu.OneOf([albu.RandomCrop(crop_size[0], crop_size[1], p=1.0)
                                        ], p=1.0),
+                           # albu.RandomBrightnessContrast(brightness_limit=0.1, contrast_limit=0.1, p=augs_p),
                            albu.OneOf([albu.HorizontalFlip(p=augs_p),
-                                       albu.VerticalFlip(p=augs_p)], p=augs_p)
+                                       albu.VerticalFlip(p=augs_p)], p=augs_p),
+                           albu.ShiftScaleRotate(shift_limit=0.0, scale_limit=0.1, rotate_limit=5, p=augs_p)
                            ], p=augs_p)
 
 valid_augs = albu.Compose([albu.PadIfNeeded(min_height=val_size[0], min_width=val_size[1], p=1.0)])

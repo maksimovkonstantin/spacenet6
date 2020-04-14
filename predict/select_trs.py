@@ -82,8 +82,8 @@ summary = [0, 0, 0]
 probs = [0.3, 0.4, 0.5, 0.6]
 # probs = [0.7, 0.8, 0.9]
 shifts = [0.2, 0.3, 0.4]
-probs = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-shifts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+#probs = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+#shifts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 best_params = ''
 best_res = 0
 for prob_trs in probs:
@@ -100,7 +100,7 @@ for prob_trs in probs:
                              # (1 - pred_data[:, :, 2]) * (1 - pred_data[:, :, 1]),
                              # np.ones(pred_data.shape[:2]),
                              # (1 - pred_data[:, :, 1]),
-                             (1 - pred_data[:, :, 2]),
+                             (1 - pred_data[:, :, 1]),
                              pred_data[:, :, 0], shift)
             # plt.imshow(tmp_labels)
             pred_labels = tmp_labels

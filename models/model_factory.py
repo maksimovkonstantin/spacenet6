@@ -1,7 +1,7 @@
 import segmentation_models_pytorch as smp
 import torch
 import torch.nn as nn
-from .unet import DPNUnet
+from .unet import DPNUnet,DensenetUnet,IRV2Unet
 
 def make_model(model_name='unet_resnet34',
                weights='imagenet',
@@ -10,6 +10,10 @@ def make_model(model_name='unet_resnet34',
     if model_name == 'selim_dpn92':
         model = DPNUnet(seg_classes=2,
                         backbone_arch='dpn92',
+                        num_channels=4)
+    elif model_name == 'selim_inceptionresnetv2':
+        model = IRV2Unet(seg_classes=2,
+                        backbone_arch='inceptionresnetv2',
                         num_channels=4)
     return model
 

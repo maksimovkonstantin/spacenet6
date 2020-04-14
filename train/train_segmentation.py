@@ -99,5 +99,6 @@ if __name__ == '__main__':
                  verbose=True,
                  main_metric=main_metric,
                  minimize_metric=minimize_metric,
-                 fp16=fp16
+                 fp16=fp16#,
+                 #distributed=False
                 )

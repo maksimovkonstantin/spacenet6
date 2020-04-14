@@ -16,23 +16,28 @@ def get_loss(loss_name='cce'):
     
 
 class FocalDiceLoss(torch.nn.Module):
-    def __init__(self, coef_focal=1.0, coef_dice=1.0):
+    def __init__(self, coef_focal=1.0, coef_dice=1.0, coef_bce=1.0):
         super().__init__()
        
         self.dice_loss = DiceLoss()
         self.focal_loss = FocalLoss()
+        # self.bce_loss = StableBCELoss()
 
         self.coef_focal = coef_focal
         self.coef_dice = coef_dice
+        # self.coef_bce = coef_bce
 
     def forward(self, outputs, targets):
         loss = 0.0
-        weights = [1.0, 1.0]
+        weights = [1.0, 0.1]
         # print(outputs.shape, targets.shape)
         for i in range(2):
             dice = weights[i]*self.dice_loss(outputs[:, i, ...], targets[:, i, ...])
             focal = weights[i]*self.focal_loss(outputs[:, i, ...], targets[:, i, ...])
+            # bce = weights[i]*self.bce_loss(outputs[:, i, ...], targets[:, i, ...])
             loss += self.coef_dice * dice + self.coef_focal * focal
+            # loss += self.coef_dice * dice + self.coef_focal * focal + self.coef_bce*bce
+
         return loss
     
 
@@ -93,3 +98,16 @@ class FocalLoss(_Loss):
         targets = torch.clamp(targets, eps, 1. - eps)
         pt = (1 - targets) * (1 - outputs) + targets * outputs
         return (-(1. - pt) ** gamma * torch.log(pt)).mean()
+
+
+class StableBCELoss(torch.nn.Module):
+    def __init__(self):
+        super(StableBCELoss, self).__init__()
+
+    def forward(self, input, target):
+        input = input.float().reshape(-1)
+        target = target.float().reshape(-1)
+        neg_abs = - input.abs()
+        # todo check correctness
+        loss = input.clamp(min=0) - input * target + (1 + neg_abs.exp()).log()
+        return loss.mean()

@@ -121,7 +121,7 @@ encoder_params = {
          'decoder_filters': [64, 128, 256, 256],
          'last_upsample': 64,
          'url': None,
-         'init_op': inceptionresnetv2},
+         'init_op': partial(InceptionResNetV2, num_channels=4)},
     'inceptionresnetv2mc':
         {'filters': [64, 192, 320, 1088, 1536],
          'decoder_filters': [64, 128, 256, 256],

@@ -20,7 +20,8 @@ class SemSegDataset(Dataset):
             n_classes=2,
             augmentation=None, 
             preprocessing=None,
-            limit_files=None
+            limit_files=None,
+            multiplier=5
             
     ):
         folds = pd.read_csv(folds_file, dtype={'image_name': object})
@@ -35,6 +36,9 @@ class SemSegDataset(Dataset):
 
         if limit_files:
             folds = folds[:limit_files]
+        if multiplier and mode == 'train':
+            folds = folds * multiplier
+
         self.n_classes = n_classes
         self.ids = folds
         self.data_type = data_type

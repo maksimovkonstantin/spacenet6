@@ -28,16 +28,22 @@ def main(test_images = '/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Int
                                  shuffle=False,
                                  num_workers=workers)
 
-        paths = ['/wdata/traced_models/baseline_flips_crops_1_unet_densenet161.pth',
-                 '/wdata/traced_models/baseline_flips_crops_2_unet_densenet161.pth',
-                 '/wdata/traced_models/baseline_flips_crops_3_unet_densenet161.pth',
-                 '/wdata/traced_models/baseline_flips_crops_1_unet_dpn92.pth',
-                 '/wdata/traced_models/baseline_flips_crops_1_unet_resnet34.pth',
-                 '/wdata/traced_models/baseline_flips_crops_2_unet_resnet34.pth',
-                 '/wdata/traced_models/baseline_flips_crops_3_unet_resnet34.pth']
+        paths = [
+                 '/wdata/traced_models/baseline_softaugs_1_selim_dpn92.pth',
+                '/wdata/traced_models/new_augs_1_unet_densenet161.pth'
+                 #'/wdata/traced_models/tmp_1_unet_resnet34.pth'
+                 #'/wdata/traced_models/baseline_flips_crops_1_unet_densenet161.pth',
+                 #'/wdata/traced_models/baseline_flips_crops_2_unet_densenet161.pth',
+                 #'/wdata/traced_models/baseline_flips_crops_3_unet_densenet161.pth',
+                 #'/wdata/traced_models/baseline_flips_crops_1_unet_dpn92.pth',
+                 # '/wdata/traced_models/baseline_flips_crops_1_unet_resnet34.pth',
+                 #'/wdata/traced_models/baseline_flips_crops_2_unet_resnet34.pth',
+                 #'/wdata/traced_models/baseline_flips_crops_3_unet_resnet34.pth'
+                 ]
 
         models = []
         for weights_path in paths:
+            print('loaded {}'.format (weights_path))
             model = torch.jit.load(weights_path)
             # model.load_state_dict(torch.load(weights_path)['model_state_dict'])
             model.eval()
@@ -48,7 +54,7 @@ def main(test_images = '/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Int
         for batch_i, test_batch in enumerate(tqdm(test_loader)):
             for model_i, model in enumerate(models):
                 runner_out = model(test_batch.cuda())
-                # image_pred = torch.sigmoid(runner_out)
+                # runner_out = torch.sigmoid(runner_out)
                 if model_i == 0:
                     image_pred = runner_out.cpu().detach().numpy()
                 else:
@@ -73,4 +79,4 @@ def main(test_images = '/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Int
 
 
 if __name__ == '__main__':
-    Fire(main())
+    Fire(main)

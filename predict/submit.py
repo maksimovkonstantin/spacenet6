@@ -46,7 +46,7 @@ def wsh(mask_img, threshold, border_img, seeds, shift):
 prob_trs = 0.3
 shift = 0.4
 
-MIN_POLYGON_AREA = 0
+MIN_POLYGON_AREA = 200
 submit_path = '/wdata/submits/solution.csv'
 data_path = '/wdata/segmentation_test_results/'
 
@@ -100,6 +100,7 @@ for _file in tqdm(files):
         df_poly.loc[:, 'wkt'] = df_poly.poly.apply(lambda x: shapely.wkt.dumps(x, rounding_precision=0))
         df_poly.loc[:, 'area_ratio'] = df_poly.area_size / df_poly.area_size.max()
         for i, row in df_poly.iterrows():
+
             line = "{},\"{}\",{:.6f}\n".format(
                 fid,
                 row.wkt,
@@ -108,6 +109,7 @@ for _file in tqdm(files):
             # print(line)
             f.write(line)
     else:
+        print('file {} is empty'.format(fid))
         f.write("{},{},0\n".format(
             fid,
             "POLYGON EMPTY"))

@@ -1,4 +1,4 @@
-from catalyst.dl.core import MetricCallback
+from catalyst.core.callbacks import MetricCallback
 import torch
 
 from catalyst.utils import get_activation_fn

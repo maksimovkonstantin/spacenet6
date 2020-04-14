@@ -9,7 +9,7 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/tmp2_1_unet_resnet34/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/tmp4_1_unet_resnet34/checkpoints/best.pth'
 validation_predict_result = '/wdata/segmentation_validation_results'
 test_predict_result = '/wdata/segmentation_test_results'
 submit_path = '/wdata/submits/baseline.csv'
@@ -28,29 +28,29 @@ original_size = (900, 900)
 
 batch_size = 32
 num_workers = 8
-val_batch_size = 4
+val_batch_size = 1
 
 shuffle = True
 lr = 1e-4
 momentum = 0.0
 decay = 0.0
 loss = 'focal_dice'
-optimizer = 'radam'
+optimizer = 'adam'
 fp16 = False
 
-alias = 'tmp2_'
+alias = 'tmp4_'
 model_name = 'unet_resnet34'
 scheduler = 'reduce_on_plateau'
-patience = 10
+patience = 5
 
-early_stopping = 30
+early_stopping = 15
 min_delta = 0.005
 
 alpha = 0.5
 augs_p = 0.5
 min_lr = 1e-6
 thershold = 0.005
-best_models_count = 5
+best_models_count = 1
 
 epochs = 300
 weights = 'imagenet'
@@ -62,13 +62,13 @@ limit_files = None # for debug
 
 preprocessing_fn = None
 
-train_augs = albu.Compose([albu.OneOf([#albu.RandomCrop(crop_size[0], crop_size[1], p=1.0),
-                                       albu.RandomSizedCrop((int(crop_size[0] * 0.75), int(crop_size[1] * 1.23)),
-                                                            crop_size[0], crop_size[1], p=1.0)
+train_augs = albu.Compose([albu.OneOf([albu.RandomCrop(crop_size[0], crop_size[1], p=1.0)
                                        ], p=1.0),
                            albu.OneOf([albu.HorizontalFlip(p=augs_p),
                                        albu.VerticalFlip(p=augs_p)], p=augs_p),
-                           albu.ShiftScaleRotate(shift_limit=0.0, scale_limit=0.1, rotate_limit=5, p=augs_p)
+                           albu.ShiftScaleRotate(shift_limit=0.0, scale_limit=0.2, rotate_limit=10, p=augs_p),
+                           albu.CoarseDropout(p=augs_p),
+                           albu.GaussNoise(var_limit=(0, 5), p=augs_p)
                            ], p=augs_p)
 
 valid_augs = albu.Compose([albu.PadIfNeeded(min_height=val_size[0], min_width=val_size[1], p=1.0)])
