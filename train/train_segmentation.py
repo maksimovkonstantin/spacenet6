@@ -1,7 +1,5 @@
-import sys
 import torch
 import os.path as osp
-from importlib import import_module
 from models.model_factory import make_model
 from losses import get_loss
 from optimizers import get_optimizer
@@ -9,8 +7,7 @@ from catalyst.dl.runner import SupervisedRunner
 from utils.helpers import get_config, parse_config_args
 from catalyst.dl.callbacks import CheckpointCallback, SchedulerCallback, EarlyStoppingCallback, IouCallback
 from callbacks import DiceCallback
-# from pytorch_toolbelt.utils.catalyst.metrics import IoUMetricsCallback
-# from segmentation_metrics import MultiClassDiceScoreCallback
+
 
 if __name__ == '__main__':
     args = parse_config_args()
@@ -99,6 +96,5 @@ if __name__ == '__main__':
                  verbose=True,
                  main_metric=main_metric,
                  minimize_metric=minimize_metric,
-                 fp16=fp16#,
-                 #distributed=False
+                 fp16=fp16
                 )

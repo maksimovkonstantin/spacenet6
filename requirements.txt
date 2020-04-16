@@ -3,7 +3,6 @@ scikit-learn
 pandas
 numpy
 scikit-image
-awscli
 pretrainedmodels
 segmentation_models_pytorch
 albumentations

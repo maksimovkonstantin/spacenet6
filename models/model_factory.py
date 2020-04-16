@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from .unet import DPNUnet,DensenetUnet,IRV2Unet
 
-def make_model(model_name='unet_resnet34',
+def make_model_selim(model_name='unet_resnet34',
                weights='imagenet',
                n_classes=2,
                input_channels=4):
@@ -18,7 +18,7 @@ def make_model(model_name='unet_resnet34',
     return model
 
 
-def make_model_old(model_name='unet_resnet34',
+def make_model(model_name='unet_resnet34',
                weights='imagenet', n_classes=2, input_channels=4):
     if weights != 'imagenet' or weights is None:
         weights_to_load = None
@@ -30,10 +30,15 @@ def make_model_old(model_name='unet_resnet34',
         model = smp.Unet('_'.join(model_name.split('_')[1:]), 
                          classes=n_classes,
                          activation=None,
-                         encoder_weights=weights_to_load
-                         #encoder_weights='imagenet+5k'
+                         encoder_weights=weights_to_load#,
+                         #in_channels=input_channels
+
+                         # decoder_attention_type=None,
+                         # decoder_channels=[512, 256, 128, 64, 32]
+                         # decoder_channels=[1024, 512, 256, 128, 64]
+                         # encoder_weights='imagenet+5k'
         )
-        
+    # densenet was initilized with 3 channels
     elif model_name.split('_')[0] == 'fpn':
         model = smp.FPN('_'.join(model_name.split('_')[1:]), 
                          classes=n_classes,
@@ -78,25 +83,27 @@ def make_model_old(model_name='unet_resnet34',
             model.encoder.features.conv0 = new_conv
 
         elif model_name.split('_')[1][:12] == 'efficientnet' or model_name.split('_')[1][:3] == 'dpn':
+            # elif model_name.split('_')[1][:3] == 'dpn':
             model = smp.Unet('_'.join(model_name.split('_')[1:]),
                              classes=n_classes,
                              in_channels=input_channels,
                              activation=None,
                              #encoder_weights=weights_to_load
-                             encoder_weights='imagenet+5k'
+                             # encoder_weights='imagenet+5k'
                              )
         else:
-            print('AAAAAAAAAAAAAAAAAAA')
-            trained_kernel = model.encoder.conv1.weight
+            pass
+            #print('AAAAAAAAAAAAAAAAAAA')
+            #trained_kernel = model.encoder.conv1.weight
             # trained_kernel = model.encoder.features.conv1_1.conv.weight
-            in_channels = input_channels
-            new_conv = nn.Conv2d(
-                       in_channels, 64, kernel_size=7, stride=2, padding=3, bias=False
-                   )
-            with torch.no_grad():
-                new_conv.weight[:, :] = torch.stack(
-                           [torch.mean(trained_kernel, 1)] * in_channels, dim=1
-                       )
-            model.encoder.conv1= new_conv
+            #in_channels = input_channels
+            #new_conv = nn.Conv2d(
+            #           in_channels, 64, kernel_size=7, stride=2, padding=3, bias=False
+            #       )
+            #with torch.no_grad():
+            #    new_conv.weight[:, :] = torch.stack(
+            #               [torch.mean(trained_kernel, 1)] * in_channels, dim=1
+            #           )
+            #model.encoder.conv1= new_conv
     
     return model

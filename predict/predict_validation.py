@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
         model.load_state_dict(torch.load(weights_path)['model_state_dict'])
         model.eval()
-        model = tta.TTAWrapper(model, flip_image2mask)
+        # model = tta.TTAWrapper(model, flip_image2mask)
         file_names = sorted(config['valid_dataset'].ids)
         # runner = SupervisedRunner(model=model)
 
@@ -82,8 +82,8 @@ if __name__ == '__main__':
             # print(test_batch.shape)
             # runner_out = runner.predict_batch({"features": test_batch[0].cuda()})['logits']
             runner_out = model(test_batch[0].cuda())
-            # image_pred = torch.sigmoid(runner_out)
-            image_pred = runner_out
+            image_pred = torch.sigmoid(runner_out)
+            # image_pred = runner_out
             image_pred = image_pred.cpu().detach().numpy()
             names = file_names[batch_i * val_batch_size:(batch_i + 1) * val_batch_size]
             for i in range(len(names)):
