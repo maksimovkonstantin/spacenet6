@@ -11,6 +11,7 @@ from skimage import measure
 from skimage.morphology import dilation, square, watershed
 from scipy.ndimage import binary_erosion
 
+
 def create_separation(labels):
     tmp = dilation(labels > 0, square(12))
     tmp2 = watershed(tmp, labels, mask=tmp, watershed_line=True) > 0

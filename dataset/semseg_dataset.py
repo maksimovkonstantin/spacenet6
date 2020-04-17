@@ -115,9 +115,6 @@ class TestSemSegDataset(Dataset):
     def __getitem__(self, i):
 
         image_path = os.path.join(self.images_dir, self.ids[i])
-        #print('BBBBBBBB')
-        #print(image_path)
-        #print(self.ids[i])
         image = self._read_img(image_path)
         if self.augmentation:
             sample = albu.Compose(self.augmentation, p=1)(image=image)

@@ -28,26 +28,15 @@ def main(test_images = '/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Int
                                  shuffle=False,
                                  num_workers=workers)
 
-        paths = [#'/wdata/traced_models/adam_gcc_1_unet_dpn92.pth',
+        paths = [
                  '/wdata/traced_models/adam_gcc_1_unet_densenet161.pth',
                  '/wdata/traced_models/adam_gcc_2_unet_densenet161.pth'
-                 # '/wdata/traced_models/baseline_softaugs_1_selim_dpn92.pth',
-                # '/wdata/traced_models/new_augs_1_unet_densenet161.pth'
-                 #'/wdata/traced_models/tmp_1_unet_resnet34.pth'
-                 #'/wdata/traced_models/baseline_flips_crops_1_unet_densenet161.pth',
-                 #'/wdata/traced_models/baseline_flips_crops_2_unet_densenet161.pth',
-                 #'/wdata/traced_models/baseline_flips_crops_3_unet_densenet161.pth',
-                 #'/wdata/traced_models/baseline_flips_crops_1_unet_dpn92.pth',
-                 # '/wdata/traced_models/baseline_flips_crops_1_unet_resnet34.pth',
-                 #'/wdata/traced_models/baseline_flips_crops_2_unet_resnet34.pth',
-                 #'/wdata/traced_models/baseline_flips_crops_3_unet_resnet34.pth'
                  ]
 
         models = []
         for weights_path in paths:
             print('loaded {}'.format (weights_path))
             model = torch.jit.load(weights_path)
-            # model.load_state_dict(torch.load(weights_path)['model_state_dict'])
             model.eval()
             model = tta.TTAWrapper(model, flip_image2mask)
             models.append(model)
