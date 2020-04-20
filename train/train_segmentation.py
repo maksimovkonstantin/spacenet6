@@ -31,14 +31,11 @@ if __name__ == '__main__':
     n_classes = config['n_classes']
     input_channels = config['input_channels']
     main_metric = config['main_metric']
-    mode = config['scheduler_mode']
-    min_lr = config['min_lr']
-    threshold = config['thershold']
+
+
     best_models_count = config['best_models_count']
     minimize_metric = config['minimize_metric']
     min_delta = config['min_delta']
-    alpha = config['alpha']
-    patience = config['patience']
 
     train_images = config['train_images']
     data_type = config['data_type']
@@ -96,8 +93,14 @@ if __name__ == '__main__':
                               lr=lr,
                               momentum=momentum,
                               decay=decay)
-    
+
     if config['scheduler'] == 'reduce_on_plateau':
+        print('reduce lr')
+        alpha = config['alpha']
+        patience = config['patience']
+        threshold = config['thershold']
+        min_lr = config['min_lr']
+        mode = config['scheduler_mode']
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer,
                                                                factor=alpha,
                                                                verbose=True,
@@ -105,8 +108,11 @@ if __name__ == '__main__':
                                                                mode=mode,
                                                                threshold=threshold,
                                                                min_lr=min_lr)
-    else:
-        scheduler = None
+    elif config['scheduler'] == 'steps':
+        print('steps lr')
+        steps = config['steps']
+        step_gamma = config['step_gamma']
+        scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer=optimizer, milestones=steps, gamma=step_gamma)
     callbacks = []
 
     dice_callback = DiceCallback()

@@ -5,21 +5,21 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/reduce_1_unet_densenet161/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_efficientnet-b7/checkpoints/best.pth'
 multiplier = 5
 
 main_metric = 'dice'
 minimize_metric = False
 scheduler_mode = 'max'
 device = 'cuda'
-fold_number = 1
+fold_number = 2
 n_classes = 2
 input_channels = 4
 crop_size = (320, 320)
 val_size = (928, 928)
 original_size = (900, 900)
 
-batch_size = 16
+batch_size = 10
 num_workers = 8
 val_batch_size = 1
 
@@ -31,20 +31,20 @@ loss = 'focal_dice'
 optimizer = 'adam_gcc'
 fp16 = False
 
-alias = 'reduce_'
-model_name = 'unet_densenet161'
-scheduler = 'reduce_on_plateau'
-patience = 3
-alpha = 0.5
-min_lr = 1e-6
-thershold = 0.005
+alias = 'newsteps_5folds_steps_adam_gcc_'
+model_name = 'unet_efficientnet-b7'
+
+scheduler = 'steps'
+
+step_gamma = 0.5
+steps = [30, 40, 50, 60, 70]
 
 early_stopping = 75
 min_delta = 0.005
 
 
 augs_p = 0.5
-
+min_lr = 1e-6
 
 best_models_count = 1
 

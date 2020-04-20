@@ -9,7 +9,7 @@ from pytorch_toolbelt.inference import tta
 from torch.utils.data import DataLoader
 from dataset.semseg_dataset import TestSemSegDataset
 from fire import Fire
-
+from models.model_factory import make_model
 
 def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Intensity/',
          test_predict_result='/wdata/segmentation_test_results'):
@@ -28,16 +28,30 @@ def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Inten
                                  shuffle=False,
                                  num_workers=workers)
 
-        paths = ['/wdata/traced_models/reduce_1_unet_dpn92.pth',
-                 '/wdata/traced_models/reduce_1_unet_densenet161.pth'
+        paths = ['/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_1_unet_densenet161/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_1_unet_dpn92/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_1_unet_efficientnet-b7/checkpoints/best.pth',
+
+                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_densenet161/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_dpn92/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_efficientnet-b7/checkpoints/best.pth'
                  #'/wdata/traced_models/adam_gcc_1_unet_densenet161.pth',
                  #'/wdata/traced_models/adam_gcc_1_unet_dpn92.pth'
                  ]
 
         models = []
+        device = 'cuda'
+        n_classes = 2
+        input_channels = 4
         for weights_path in paths:
             print('loaded {}'.format (weights_path))
-            model = torch.jit.load(weights_path)
+            model_name  = '_'.join(weights_path.split('/')[-3].split('_')[-2:])
+            model = make_model(
+                model_name=model_name,
+                weights=None,
+                n_classes=n_classes,
+                input_channels=input_channels).to(device)
+            # model = torch.jit.load(weights_path)
             model.eval()
             model = tta.TTAWrapper(model, flip_image2mask)
             models.append(model)

@@ -5,7 +5,7 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/reduce_1_unet_densenet161/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/reduce_1_unet_senet154/checkpoints/best.pth'
 multiplier = 5
 
 main_metric = 'dice'
@@ -19,8 +19,8 @@ crop_size = (320, 320)
 val_size = (928, 928)
 original_size = (900, 900)
 
-batch_size = 16
-num_workers = 8
+batch_size = 14
+num_workers = 14
 val_batch_size = 1
 
 shuffle = True
@@ -32,7 +32,7 @@ optimizer = 'adam_gcc'
 fp16 = False
 
 alias = 'reduce_'
-model_name = 'unet_densenet161'
+model_name = 'unet_senet154'
 scheduler = 'reduce_on_plateau'
 patience = 3
 alpha = 0.5

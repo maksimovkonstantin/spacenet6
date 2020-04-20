@@ -5,8 +5,9 @@ from sklearn.model_selection import KFold
 
 
 def create_folds(images_path='/data/SN6_buildings/train/AOI_11_Rotterdam/geojson_buildings/',
+                 # seed=13,
                  seed=769,
-                 n_folds=4,
+                 n_folds=5,
                  out_file='/wdata/folds.csv'):
 
     files = sorted(os.listdir(images_path))

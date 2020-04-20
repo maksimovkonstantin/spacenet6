@@ -19,7 +19,7 @@ crop_size = (320, 320)
 val_size = (928, 928)
 original_size = (900, 900)
 
-batch_size = 16
+batch_size = 12
 num_workers = 8
 val_batch_size = 1
 
@@ -34,9 +34,9 @@ fp16 = False
 alias = 'adam_gcc_'
 model_name = 'unet_resnext101_32x8d'
 scheduler = 'reduce_on_plateau'
-patience = 3
+patience = 5
 
-early_stopping = 6
+early_stopping = 60
 min_delta = 0.005
 
 alpha = 0.5
@@ -45,7 +45,7 @@ min_lr = 1e-6
 thershold = 0.005
 best_models_count = 1
 
-epochs = 75
+epochs = 60
 weights = 'imagenet'
 limit_files = None
 

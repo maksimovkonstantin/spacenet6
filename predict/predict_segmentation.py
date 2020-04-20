@@ -13,7 +13,8 @@ from torch.utils.data import DataLoader
 from fire import Fire
 
 
-def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Intensity/'):
+def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Intensity/',
+         test_predict_result='/wdata/segmentation_test_results'):
     with torch.no_grad():
         args = parse_config_args()
         config = get_config(args.config)
@@ -22,7 +23,7 @@ def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Inten
         device = config['device']
         val_batch_size = config['val_batch_size']
         input_channels = config['input_channels']
-        test_predict_result = config['test_predict_result']
+
         original_size = config['original_size']
         cropper = albu.Compose([albu.CenterCrop(original_size[0], original_size[1], p=1.0)])
         n_classes = config['n_classes']
@@ -52,7 +53,7 @@ def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Inten
         model.eval()
         model = tta.TTAWrapper(model, flip_image2mask)
 
-        file_names = sorted(config['test_dataset'].ids)
+        file_names = sorted(test_dataset.ids)
 
         for batch_i, test_batch in enumerate(tqdm(test_loader)):
             runner_out = model(test_batch.cuda())
@@ -74,6 +75,6 @@ def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Inten
 
 
 if __name__ == '__main__':
-    Fire(main)
+    main()
 
 
