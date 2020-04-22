@@ -1,1 +1,0 @@
-python3 ./utils/create_masks.py
