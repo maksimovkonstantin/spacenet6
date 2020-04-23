@@ -100,10 +100,10 @@ for prob_trs in probs:
             gt_labels = ndi.label(gt, output=np.uint32)[0]
             # pred_data[:, :, 1] = 0.0
             tmp_labels = wsh(pred_data[:, :, 0], prob_trs,
-                             # (1 - pred_data[:, :, 2]) * (1 - pred_data[:, :, 1]),
+                             (1 - pred_data[:, :, 2]) * (1 - pred_data[:, :, 1]),
                              # np.ones(pred_data.shape[:2]),
+                             #(1 - pred_data[:, :, 1]),
                              # (1 - pred_data[:, :, 1]),
-                             (1 - pred_data[:, :, 1]),
                              pred_data[:, :, 0], shift)
             # plt.imshow(tmp_labels)
             pred_labels = tmp_labels

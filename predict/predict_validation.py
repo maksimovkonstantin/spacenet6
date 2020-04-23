@@ -59,11 +59,13 @@ def main(test_predict_result='/wdata/segmentation_validation_results'):
                                   shuffle=False,
                                   num_workers=num_workers)
 
-        file_names = sorted(config['valid_dataset'].ids)
-
+        file_names = sorted(valid_dataset.ids)
+        # print(file_names)
         for batch_i, test_batch in enumerate(tqdm(valid_loader)):
+
             runner_out = model(test_batch[0].cuda())
-            image_pred = torch.sigmoid(runner_out)
+            image_pred = runner_out
+            # image_pred = torch.sigmoid(runner_out)
             image_pred = image_pred.cpu().detach().numpy()
             names = file_names[batch_i * val_batch_size:(batch_i + 1) * val_batch_size]
             for i in range(len(names)):
@@ -80,5 +82,5 @@ def main(test_predict_result='/wdata/segmentation_validation_results'):
                     dest.write(data)
 
 if __name__ == '__main__':
-   Fire(main)
+   main()
 

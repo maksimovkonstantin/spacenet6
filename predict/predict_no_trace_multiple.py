@@ -11,11 +11,12 @@ from dataset.semseg_dataset import TestSemSegDataset
 from fire import Fire
 from models.model_factory import make_model
 
+
 def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Intensity/',
          test_predict_result='/wdata/segmentation_test_results'):
     with torch.no_grad():
-        batch_size = 8
-        workers = 8
+        batch_size = 16
+        workers = 16
         test_augs = albu.Compose([albu.PadIfNeeded(min_height=928, min_width=928, p=1.0)])
         cropper = albu.Compose([albu.CenterCrop(900, 900, p=1.0)])
         test_dataset = TestSemSegDataset(images_dir=test_images,
@@ -28,33 +29,37 @@ def main(test_images='/data/SN6_buildings/test_public/AOI_11_Rotterdam/SAR-Inten
                                  shuffle=False,
                                  num_workers=workers)
 
-        paths = ['/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_1_unet_densenet161/checkpoints/best.pth',
-                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_1_unet_dpn92/checkpoints/best.pth',
-                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_1_unet_efficientnet-b7/checkpoints/best.pth',
+        paths = ['/wdata/segmentation_logs/3_reduce_1_unet_densenet161/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/3_reduce_2_unet_densenet161/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/3_reduce_1_unet_dpn92/checkpoints/best.pth',
+                 '/wdata/segmentation_logs/3_reduce_2_unet_dpn92/checkpoints/best.pth'
 
-                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_densenet161/checkpoints/best.pth',
-                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_dpn92/checkpoints/best.pth',
-                 '/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_efficientnet-b7/checkpoints/best.pth'
+                 #'/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_densenet161/checkpoints/best.pth',
+                 #'/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_dpn92/checkpoints/best.pth',
+                 #'/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_efficientnet-b7/checkpoints/best.pth'
                  #'/wdata/traced_models/adam_gcc_1_unet_densenet161.pth',
                  #'/wdata/traced_models/adam_gcc_1_unet_dpn92.pth'
                  ]
 
         models = []
         device = 'cuda'
-        n_classes = 2
+        n_classes = 3
         input_channels = 4
         for weights_path in paths:
-            print('loaded {}'.format (weights_path))
+
             model_name  = '_'.join(weights_path.split('/')[-3].split('_')[-2:])
             model = make_model(
                 model_name=model_name,
                 weights=None,
                 n_classes=n_classes,
                 input_channels=input_channels).to(device)
+            model.load_state_dict(torch.load(weights_path, map_location="cpu")['model_state_dict'])
             # model = torch.jit.load(weights_path)
             model.eval()
             model = tta.TTAWrapper(model, flip_image2mask)
+            model = torch.nn.DataParallel(model).cuda()
             models.append(model)
+            print('loaded {}'.format(weights_path))
 
         file_names = sorted(test_dataset.ids)
         for batch_i, test_batch in enumerate(tqdm(test_loader)):

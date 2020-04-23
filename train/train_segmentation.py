@@ -1,5 +1,6 @@
 import torch
 import os.path as osp
+import os
 from models.model_factory import make_model
 from losses import get_loss
 from optimizers import get_optimizer
@@ -9,10 +10,14 @@ from catalyst.dl.callbacks import CheckpointCallback, EarlyStoppingCallback
 from callbacks import DiceCallback
 from dataset.semseg_dataset import SemSegDataset
 from torch.utils.data import DataLoader
+from fire import Fire
 
-if __name__ == '__main__':
-    args = parse_config_args()
-    config = get_config(args.config)
+
+def main(config_path='../configs/densenet161_gcc_fold1.py',
+         gpu='0'):
+    os.environ["CUDA_VISIBLE_DEVICES"] = gpu
+    # args = parse_config_args()
+    config = get_config(config_path)
     model_name = config['model_name']
     fold_number = config['fold_number']
     alias = config['alias']
@@ -55,6 +60,7 @@ if __name__ == '__main__':
                                   data_type=data_type,
                                   masks_dir=masks_data_path,
                                   mode='train',
+                                  n_classes=n_classes,
                                   folds_file=folds_file,
                                   fold_number=fold_number,
                                   augmentation=train_augs,
@@ -71,6 +77,7 @@ if __name__ == '__main__':
                                   data_type=data_type,
                                   mode='valid',
                                   folds_file=folds_file,
+                                  n_classes=n_classes,
                                   fold_number=fold_number,
                                   augmentation=valid_augs,
                                   preprocessing=preprocessing_fn,
@@ -140,3 +147,6 @@ if __name__ == '__main__':
                  fp16=fp16
                 )
 
+
+if __name__ == '__main__':
+    Fire(main)

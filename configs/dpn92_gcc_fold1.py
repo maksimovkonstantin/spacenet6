@@ -5,7 +5,7 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/reduce_1_unet_dpn92/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/3_reduce_1_unet_dpn92/checkpoints/best.pth'
 multiplier = 5
 
 main_metric = 'dice'
@@ -13,7 +13,7 @@ minimize_metric = False
 scheduler_mode = 'max'
 device = 'cuda'
 fold_number = 1
-n_classes = 2
+n_classes = 3
 input_channels = 4
 crop_size = (320, 320)
 val_size = (928, 928)
@@ -31,7 +31,7 @@ loss = 'focal_dice'
 optimizer = 'adam_gcc'
 fp16 = False
 
-alias = 'reduce_'
+alias = '3_reduce_'
 model_name = 'unet_dpn92'
 scheduler = 'reduce_on_plateau'
 patience = 3

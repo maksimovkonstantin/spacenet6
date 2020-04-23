@@ -59,9 +59,9 @@ for _file in tqdm(files):
     # print(fid)
     pred_data = skimage.io.imread(file_path, plugin='tifffile')
     labels = wsh(pred_data[:, :, 0], prob_trs,
-                 1 - pred_data[:, :, 1],
-                        #(1 - pred_data[:, :, 1])*(1 - pred_data[:, :, 2]),
-                         pred_data[:, :, 0],
+                 1 - pred_data[:, :, 2],
+                 # (1 - pred_data[:, :, 1])*(1 - pred_data[:, :, 2]),
+                  pred_data[:, :, 0],
                  shift)
     label_numbers = list(np.unique(labels))
     all_dfs = []

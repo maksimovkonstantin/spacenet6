@@ -12,7 +12,7 @@ def get_loss(loss_name='cce'):
     
 
 class FocalDiceLoss(torch.nn.Module):
-    def __init__(self, coef_focal=1.0, coef_dice=1.0, weights=(1.0, 0.1)):
+    def __init__(self, coef_focal=1.0, coef_dice=1.0, weights=(1.0, 0.1, 0.5)):
         super().__init__()
        
         self.dice_loss = DiceLoss()
