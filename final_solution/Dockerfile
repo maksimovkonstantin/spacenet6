@@ -16,4 +16,4 @@ RUN chmod +x /project/test.sh
 WORKDIR /project
 
 ENV PYTHONPATH "${PYTHONPATH}:/project"
-ENV TORCH_HOME="/wdata/pretrained_models"
+ENV TORCH_HOME="/wdata/pretrained_models/"

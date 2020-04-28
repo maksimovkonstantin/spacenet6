@@ -4,12 +4,12 @@ import pandas as pd
 from sklearn.model_selection import KFold
 
 
-def create_folds(images_path='/data/SN6_buildings/train/AOI_11_Rotterdam/geojson_buildings/',
+def create_folds(images_path='/data/SN6_buildings/train/AOI_11_Rotterdam/',
                  seed=769,
                  n_folds=8,
                  out_file='/wdata/folds.csv'):
 
-    files = sorted(os.listdir(images_path))
+    files = sorted(os.listdir(os.path.join(images_path, 'geojson_buildings')))
     files = ['_'.join(el.split('.')[0].split('_')[6:]) for el in files]
 
     target_df = {'image_name': [], 'fold_number': []}
