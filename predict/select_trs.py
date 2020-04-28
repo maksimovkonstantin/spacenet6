@@ -5,6 +5,7 @@ from scipy import ndimage as ndi
 from skimage.morphology import watershed
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+import cv2
 
 
 def my_watershed(what, mask1, mask2):
@@ -95,14 +96,15 @@ for prob_trs in probs:
             continue
         summary = [0, 0, 0]
         for _file in tqdm(ids[:100]):
-            pred_data = skimage.io.imread(os.path.join(pred_path, _file), plugin='tifffile')
-            gt = (skimage.io.imread(os.path.join(gt_path, _file), plugin='tifffile')[:, :, 0] / 255).astype(np.uint8)
+            #pred_data = skimage.io.imread(os.path.join(pred_path, _file), plugin='tifffile')
+            gt = (skimage.io.imread(os.path.join(gt_path,  _file.split('.')[0] + '.tif'), plugin='tifffile')[:, :, 0] / 255).astype(np.uint8)
+            pred_data = cv2.imread(os.path.join(pred_path, _file.split('.')[0] + '.png')) / 255.0
             gt_labels = ndi.label(gt, output=np.uint32)[0]
             # pred_data[:, :, 1] = 0.0
             tmp_labels = wsh(pred_data[:, :, 0], prob_trs,
-                             (1 - pred_data[:, :, 2]) * (1 - pred_data[:, :, 1]),
+                             #(1 - pred_data[:, :, 2]) * (1 - pred_data[:, :, 1]),
                              # np.ones(pred_data.shape[:2]),
-                             #(1 - pred_data[:, :, 1]),
+                             (1 - pred_data[:, :, 1]),
                              # (1 - pred_data[:, :, 1]),
                              pred_data[:, :, 0], shift)
             # plt.imshow(tmp_labels)

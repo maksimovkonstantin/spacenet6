@@ -34,8 +34,8 @@ def main(test_predict_result='/wdata/segmentation_validation_results'):
 
         paths = ['/wdata/segmentation_logs/3_reduce_1_unet_densenet161/checkpoints/best.pth',
                  '/wdata/segmentation_logs/3_reduce_1_unet_dpn92/checkpoints/best.pth'
-            #'/wdata/segmentation_logs/reduce_1_unet_efficientnet-b7/checkpoints/best.pth',
-            #'/wdata/segmentation_logs/reduce_1_unet_senet154/checkpoints/best.pth'
+                 #'/wdata/segmentation_logs/reduce_1_unet_efficientnet-b7/checkpoints/best.pth',
+                 #'/wdata/segmentation_logs/reduce_1_unet_senet154/checkpoints/best.pth'
                  #'/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_densenet161/checkpoints/best.pth',
                  #'/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_dpn92/checkpoints/best.pth',
                  #'/wdata/segmentation_logs/newsteps_5folds_steps_adam_gcc_2_unet_efficientnet-b7/checkpoints/best.pth'

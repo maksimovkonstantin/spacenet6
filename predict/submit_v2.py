@@ -49,11 +49,40 @@ def main(folds_predict='/wdata/folds_predicts',
          prob_trs=0.3,
          shift=0.4,
          min_lolygon_area=200,
-         submit_path='/wdata/submits/solution.csv'):
+         submit_path='/wdata/submits/solution.csv',
+         save_path='/wdata/submit_predicts'):
 
     folds = os.listdir(folds_predict)
+    #folds = ['3_reduce_1_unet_dpn92',
+    #         '3_reduce_2_unet_dpn92',
+    #         '3_reduce_3_unet_dpn92',
+    #         '3_reduce_4_unet_dpn92']
+
     #folds = ['3_reduce_1_unet_efficientnet-b7',
-    #         '3_reduce_1_unet_senet154']
+    #         '3_reduce_2_unet_efficientnet-b7',
+    #         '3_reduce_3_unet_efficientnet-b7',
+    #         '3_reduce_4_unet_efficientnet-b7',
+
+    #         '3_reduce_1_unet_senet154',
+    #         '3_reduce_2_unet_senet154',
+    #         '3_reduce_3_unet_senet154',
+    #         '3_reduce_4_unet_senet154'
+
+    #]
+
+    #folds = ['3_reduce_1_unet_densenet161',
+    #         '3_reduce_2_unet_densenet161',
+    #         '3_reduce_3_unet_densenet161',
+    #         '3_reduce_4_unet_densenet161',
+    #         '3_reduce_5_unet_densenet161',
+
+    #         '3_reduce_1_unet_dpn92',
+    #         '3_reduce_2_unet_dpn92',
+    #         '3_reduce_3_unet_dpn92',
+    #         '3_reduce_4_unet_dpn92',
+    #         '3_reduce_5_unet_dpn92'
+    #         ]
+
     print(folds)
     files = sorted(os.listdir(os.path.join(folds_predict, folds[0])))[:]
 
@@ -71,9 +100,13 @@ def main(folds_predict='/wdata/folds_predicts',
         fid = '_'.join(_file.split('_')[-4:]).split('.')[0]
         pred_data = final_data / len(folds)
 
+        file_save_path = os.path.join(save_path, _file)
+        cv2.imwrite(file_save_path, (pred_data * 255).astype(np.uint8))
+
         labels = wsh(pred_data[:, :, 0],
                      prob_trs,
-                     1 - pred_data[:, :, 2],
+                     # ( 1 - pred_data[:, :, 2])*( 1 - pred_data[:, :, 1]),
+                      1 - pred_data[:, :, 2],
                       pred_data[:, :, 0],
                      shift)
         label_numbers = list(np.unique(labels))

@@ -5,14 +5,14 @@ train_images = '/data/SN6_buildings/train/AOI_11_Rotterdam/'
 masks_data_path = '/wdata/train_masks'
 logs_path = '/wdata/segmentation_logs/'
 folds_file = '/wdata/folds.csv'
-load_from = '/wdata/segmentation_logs/8_3_reduce_1_unet_senet154/checkpoints/best.pth'
+load_from = '/wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/best.pth'
 multiplier = 5
 
 main_metric = 'dice'
 minimize_metric = False
 scheduler_mode = 'max'
 device = 'cuda'
-fold_number = 1
+fold_number = 8
 n_classes = 3
 input_channels = 4
 crop_size = (320, 320)

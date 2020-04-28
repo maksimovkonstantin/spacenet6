@@ -19,8 +19,8 @@ crop_size = (320, 320)
 val_size = (928, 928)
 original_size = (900, 900)
 
-batch_size = 10
-num_workers = 10
+batch_size = 6
+num_workers = 6
 val_batch_size = 1
 
 shuffle = True

@@ -2,26 +2,31 @@ import os
 import shutil
 from utils.helpers import get_config
 
+
 def main():
     configs = ['../configs/densenet161_gcc_fold1.py',
                '../configs/densenet161_gcc_fold2.py',
-               #'/project/configs/densenet161_gcc_fold3.py',
-               #'/project/configs/densenet161_gcc_fold4.py',
+               '../configs/densenet161_gcc_fold3.py',
+               '../configs/densenet161_gcc_fold4.py',
+               '../configs/densenet161_gcc_fold5.py',
 
-               #'/project/configs/dpn92_gcc_fold1.py',
-               #'/project/configs/dpn92_gcc_fold2.py',
-               #'/project/configs/dpn92_gcc_fold3.py',
-               #'/project/configs/dpn92_gcc_fold4.py',
+               '../configs/dpn92_gcc_fold1.py',
+               '../configs/dpn92_gcc_fold2.py',
+               '../configs/dpn92_gcc_fold3.py',
+               '../configs/dpn92_gcc_fold4.py',
+               '../configs/dpn92_gcc_fold5.py',
 
-               #'/project/configs/effnetb7_gcc_fold1.py',
-               #'/project/configs/effnetb7_gcc_fold2.py',
-               #'/project/configs/effnetb7_gcc_fold3.py',
-               #'/project/configs/effnetb7_gcc_fold4.py',
+               '../configs/senet154_gcc_fold1.py',
+               '../configs/senet154_gcc_fold2.py',
+               '../configs/senet154_gcc_fold3.py',
+               '../configs/senet154_gcc_fold4.py',
 
-               #'/project/configs/senet154_gcc_fold1.py',
-               #'/project/configs/senet154_gcc_fold2.py',
-               #'/project/configs/senet154_gcc_fold3.py',
-               #'/project/configs/senet154_gcc_fold4.py'
+               '../configs/effnetb7_gcc_fold1.py',
+               '../configs/effnetb7_gcc_fold2.py',
+               '../configs/effnetb7_gcc_fold3.py',
+               '../configs/effnetb7_gcc_fold4.py'
+
+
                ]
 
     for config_number, config in enumerate(configs):

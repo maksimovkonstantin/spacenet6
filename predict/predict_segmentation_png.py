@@ -9,10 +9,29 @@ import albumentations as albu
 import cv2
 import rasterio
 from pytorch_toolbelt.inference import tta
-from tta import flip_image2mask
+from tta import flip_image2mask, torch_flipud, torch_fliplr, torch_rot90, torch_rot180, torch_rot270
 from dataset.semseg_dataset import TestSemSegDataset
 from torch.utils.data import DataLoader
 from fire import Fire
+
+def with_rotate(model, image):
+    """Test-time augmentation for image segmentation that averages predictions
+    for input image and vertically flipped one.
+    For segmentation we need to reverse the transformation after making a prediction
+    on augmented input.
+    :param model: Model to use for making predictions.
+    :param image: Model input.
+    :return: Arithmetically averaged predictions
+    """
+    output = (torch.sigmoid(model(image)) +
+              torch.sigmoid(torch_fliplr(model(torch_fliplr(image)))) +
+              torch.sigmoid(torch_flipud(model(torch_flipud(image)))) #+
+              #torch.sigmoid(torch_rot270(model(torch_rot90(image)))) +
+              #torch.sigmoid(torch_rot180(model(torch_rot180(image)))) +
+              #torch.sigmoid(torch_rot90(model(torch_rot270(image))))
+             )
+    one_over_3 = float(1.0 / 3.0)
+    return output * one_over_3
 
 
 def main(config_path='../configs/densenet161_gcc_fold1.py',
@@ -69,7 +88,8 @@ def main(config_path='../configs/densenet161_gcc_fold1.py',
         model.load_state_dict(torch.load(weights_path)['model_state_dict'])
 
         model.eval()
-        model = tta.TTAWrapper(model, flip_image2mask)
+        # model = tta.TTAWrapper(model, flip_image2mask)
+        model = tta.TTAWrapper(model, with_rotate)
         model = torch.nn.DataParallel(model).cuda()
 
         file_names = sorted(test_dataset.ids)

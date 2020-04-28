@@ -7,11 +7,30 @@ from models.model_factory import make_model
 import albumentations as albu
 import rasterio
 from pytorch_toolbelt.inference import tta
-from tta import flip_image2mask
+from tta import flip_image2mask, torch_flipud, torch_fliplr, torch_rot90, torch_rot180, torch_rot270
 from dataset.semseg_dataset import SemSegDataset
 from torch.utils.data import DataLoader
 from fire import Fire
+import cv2
 
+def with_rotate(model, image):
+    """Test-time augmentation for image segmentation that averages predictions
+    for input image and vertically flipped one.
+    For segmentation we need to reverse the transformation after making a prediction
+    on augmented input.
+    :param model: Model to use for making predictions.
+    :param image: Model input.
+    :return: Arithmetically averaged predictions
+    """
+    output = (torch.sigmoid(model(image)) +
+              torch.sigmoid(torch_fliplr(model(torch_fliplr(image)))) +
+              torch.sigmoid(torch_flipud(model(torch_flipud(image)))) +
+              torch.sigmoid(torch_rot270(model(torch_rot90(image)))) +
+              torch.sigmoid(torch_rot180(model(torch_rot180(image)))) +
+              torch.sigmoid(torch_rot90(model(torch_rot270(image))))
+             )
+    one_over_3 = float(1.0 / 6.0)
+    return output * one_over_3
 
 def main(test_predict_result='/wdata/segmentation_validation_results'):
     with torch.no_grad():
@@ -69,17 +88,20 @@ def main(test_predict_result='/wdata/segmentation_validation_results'):
             image_pred = image_pred.cpu().detach().numpy()
             names = file_names[batch_i * val_batch_size:(batch_i + 1) * val_batch_size]
             for i in range(len(names)):
-                file_name = os.path.join(test_predict_result, names[i] + '.tif')
+                file_name = os.path.join(test_predict_result, names[i] + '.png')
                 data = image_pred[i, ...]
                 data = np.moveaxis(data, 0, -1)
                 sample = cropper(image=data)
 
                 data = sample['image']
-                data = np.moveaxis(data, -1, 0)
+                # data = np.moveaxis(data, -1, 0)
                 c, h, w = data.shape
-                with rasterio.open(file_name, "w", dtype=rasterio.float32, driver='GTiff',
-                                   width=h, height=h, count=c) as dest:
-                    dest.write(data)
+
+                #with rasterio.open(file_name, "w", dtype=rasterio.float32, driver='GTiff',
+                #                   width=h, height=h, count=c) as dest:
+                #    dest.write(data)
+                data = (data * 255).astype(np.uint8)
+                cv2.imwrite(file_name, data)
 
 if __name__ == '__main__':
    main()

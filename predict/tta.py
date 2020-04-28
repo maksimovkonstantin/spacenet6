@@ -19,6 +19,17 @@ def torch_fliplr(x):
     return x.flip(3)
 
 
+def torch_rot90(x):
+    return x.transpose(2, 3).flip(2)
+
+
+def torch_rot180(x):
+    return x.flip(2).flip(3)
+
+
+def torch_rot270(x):
+    return x.transpose(2, 3).flip(3)
+
 def flip_image2mask(model, image):
     """Test-time augmentation for image segmentation that averages predictions
     for input image and vertically flipped one.
