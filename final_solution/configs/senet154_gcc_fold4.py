@@ -48,7 +48,7 @@ augs_p = 0.5
 
 best_models_count = 1
 
-epochs = 75
+epochs = 75*0+1
 
 weights = 'imagenet'
 limit_files = None

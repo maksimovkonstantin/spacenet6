@@ -5,14 +5,14 @@ from utils.helpers import get_config
 
 def main():
     configs = [
-               '/project/configs/senet154_gcc_fold1.py',
-               '/project/configs/senet154_gcc_fold2.py',
-               '/project/configs/senet154_gcc_fold3.py',
-               '/project/configs/senet154_gcc_fold4.py',
-               '/project/configs/senet154_gcc_fold5.py',
-               '/project/configs/senet154_gcc_fold6.py',
-               '/project/configs/senet154_gcc_fold7.py',
-               '/project/configs/senet154_gcc_fold8.py'
+               '../configs/senet154_gcc_fold1.py',
+               '../configs/senet154_gcc_fold2.py',
+               '../configs/senet154_gcc_fold3.py',
+               '../configs/senet154_gcc_fold4.py',
+               '../configs/senet154_gcc_fold5.py',
+               '../configs/senet154_gcc_fold6.py',
+               '../configs/senet154_gcc_fold7.py',
+               '../configs/senet154_gcc_fold8.py'
               ]
 
     for config_number, config in enumerate(configs):

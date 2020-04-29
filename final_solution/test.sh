@@ -2,7 +2,7 @@
 ARG1=${1:-/data/SN6_buildings/test_public/AOI_11_Rotterdam/}
 ARG2=${2:-/wdata/solution.csv}
 
-mkdir -p /wdata/segmentation_logs/ /wdata/folds_predict/
+mkdir -p /wdata/segmentation_logs/ /wdata/folds_predictss/
 
 if [ "$(ls -A /wdata/segmentation_logs/)" ]; then
      echo "trained weights available"
@@ -16,14 +16,14 @@ else
     mkdir -p /wdata/segmentation_logs/8_3_reduce_6_unet_senet154/checkpoints/
     mkdir -p /wdata/segmentation_logs/8_3_reduce_7_unet_senet154/checkpoints/
     mkdir -p /wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_1_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_2_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_3_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_4_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_5_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_6_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_7_unet_senet154/checkpoints/best.pth
-    gdown https://httpbin.org/ip -O /wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_1_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_2_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_3_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_4_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_5_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_6_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_7_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/best.pth
 
 fi
 
