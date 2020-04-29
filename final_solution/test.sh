@@ -16,14 +16,14 @@ else
     mkdir -p /wdata/segmentation_logs/8_3_reduce_6_unet_senet154/checkpoints/
     mkdir -p /wdata/segmentation_logs/8_3_reduce_7_unet_senet154/checkpoints/
     mkdir -p /wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_1_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_2_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_3_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_4_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_5_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_6_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_7_unet_senet154/checkpoints/best.pth
-    gdown https://drive.google.com/uc?id=1XnUqlwggvQe_SbmbxNvPbbhVPaYvln7Q -O /wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=15YTIHPA4hs2tJMFXP0q_2y2B_-UmaQl0 -O /wdata/segmentation_logs/8_3_reduce_1_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=12Qe47uM082NKJ5bqdgmpT_4etTd9a3Q9 -O /wdata/segmentation_logs/8_3_reduce_2_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1z45o0HOGz82YzzcDXBJ56BOsbT97jM3Y -O /wdata/segmentation_logs/8_3_reduce_3_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1NGxMXeXz1L-Z_jGQsyOu53beE9zf6cTg -O /wdata/segmentation_logs/8_3_reduce_4_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1qltahKKpnkxPr2LwDe7MXxt1TrDhSKkc -O /wdata/segmentation_logs/8_3_reduce_5_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=13s1NIqdVQMEHZ4kIMl0y1h5oOhUVQDE_ -O /wdata/segmentation_logs/8_3_reduce_6_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1NeWZAFZLJfhwzWOFragAHyoL0vBUEHxK -O /wdata/segmentation_logs/8_3_reduce_7_unet_senet154/checkpoints/best.pth
+    gdown https://drive.google.com/uc?id=1UfYEtvzdIT6lSlp2OaHzjK0oEkl3Mvqi -O /wdata/segmentation_logs/8_3_reduce_8_unet_senet154/checkpoints/best.pth
 
 fi
 
