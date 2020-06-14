@@ -46,7 +46,7 @@ def wsh(mask_img, threshold, border_img, seeds, shift):
 
 
 def main(folds_predict='/wdata/folds_predicts',
-         prob_trs=0.3,
+         prob_trs=0.4,
          shift=0.4,
          min_lolygon_area=200,
          submit_path='/wdata/submits/solution.csv',

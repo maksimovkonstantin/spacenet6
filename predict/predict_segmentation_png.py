@@ -89,14 +89,14 @@ def main(config_path='../configs/densenet161_gcc_fold1.py',
 
         model.eval()
         # model = tta.TTAWrapper(model, flip_image2mask)
-        model = tta.TTAWrapper(model, with_rotate)
+        # model = tta.TTAWrapper(model, with_rotate)
         model = torch.nn.DataParallel(model).cuda()
 
         file_names = sorted(test_dataset.ids)
 
         for batch_i, test_batch in enumerate(tqdm(test_loader)):
             runner_out = model(test_batch.cuda())
-            image_pred = runner_out
+            image_pred = torch.sigmoid(runner_out)
 
             image_pred = image_pred.cpu().detach().numpy()
             names = file_names[batch_i * val_batch_size:(batch_i + 1) * val_batch_size]

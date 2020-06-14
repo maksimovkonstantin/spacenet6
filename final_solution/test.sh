@@ -2,7 +2,7 @@
 ARG1=${1:-/data/SN6_buildings/test_public/AOI_11_Rotterdam/}
 ARG2=${2:-/wdata/solution.csv}
 
-mkdir -p /wdata/segmentation_logs/ /wdata/folds_predictss/
+mkdir -p /wdata/segmentation_logs/ /wdata/folds_predicts/
 
 if [ "$(ls -A /wdata/segmentation_logs/)" ]; then
      echo "trained weights available"

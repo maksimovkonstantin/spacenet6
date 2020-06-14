@@ -46,43 +46,13 @@ def wsh(mask_img, threshold, border_img, seeds, shift):
 
 
 def main(folds_predict='/wdata/folds_predicts',
-         prob_trs=0.3,
+         prob_trs=0.4,
          shift=0.4,
          min_lolygon_area=200,
          submit_path='/wdata/submits/solution.csv',
          save_path='/wdata/submit_predicts/'):
 
     folds = os.listdir(folds_predict)
-    #folds = ['3_reduce_1_unet_dpn92',
-    #         '3_reduce_2_unet_dpn92',
-    #         '3_reduce_3_unet_dpn92',
-    #         '3_reduce_4_unet_dpn92']
-
-    #folds = ['3_reduce_1_unet_efficientnet-b7',
-    #         '3_reduce_2_unet_efficientnet-b7',
-    #         '3_reduce_3_unet_efficientnet-b7',
-    #         '3_reduce_4_unet_efficientnet-b7',
-
-    #         '3_reduce_1_unet_senet154',
-    #         '3_reduce_2_unet_senet154',
-    #         '3_reduce_3_unet_senet154',
-    #         '3_reduce_4_unet_senet154'
-
-    #]
-
-    #folds = ['3_reduce_1_unet_densenet161',
-    #         '3_reduce_2_unet_densenet161',
-    #         '3_reduce_3_unet_densenet161',
-    #         '3_reduce_4_unet_densenet161',
-    #         '3_reduce_5_unet_densenet161',
-
-    #         '3_reduce_1_unet_dpn92',
-    #         '3_reduce_2_unet_dpn92',
-    #         '3_reduce_3_unet_dpn92',
-    #         '3_reduce_4_unet_dpn92',
-    #         '3_reduce_5_unet_dpn92'
-    #         ]
-
     print(folds)
     files = sorted(os.listdir(os.path.join(folds_predict, folds[0])))[:]
 
